@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 3.28 FATAL_ERROR)
+
+project(kazamori
+	VERSION 0.0.1
+	DESCRIPTION ""
+	LANGUAGES C
+)
+
+add_library(kazamori SHARED)
+
+target_sources(kazamori PRIVATE
+	src/kNN.c
+	
+	src/library.c
+	src/data_set.c
+	src/full_connected.c
+	src/image_set.c
+	src/max_pooling.c
+	src/convolution.c
+
+	print/data_set_print.c
+	print/full_connected_print.c
+	print/image_set_print.c
+	print/max_pooling_print.c
+	print/convolution_print.c
+)
+
+target_include_directories(kazamori PUBLIC
+	include
+	src
+	print
+)
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+	# -mwindows - remove console output
+		message("++ kazamori built with -mwindows")
+	target_compile_options(kazamori PRIVATE -mwindows)
+endif()
+target_compile_options(kazamori PRIVATE -Wall -Wextra -Wpedantic -D${CMAKE_BUILD_TYPE} -mwindows)
+target_compile_features(kazamori PRIVATE c_std_23)
+set_target_properties(kazamori PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/
+)
